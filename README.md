@@ -1,7 +1,3 @@
-Here's a cleaned-up and properly formatted version of your `README.md` for **FitTracker**:
-
----
-
 # FitTracker
 
 **FitTracker** is a personal fitness and wellness tracker developed using Flutter. This application helps users log their workouts, document meals, set wellness goals, and track their overall health using an intuitive interface and engaging visualizations.
