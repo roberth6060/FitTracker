@@ -82,13 +82,5 @@ Contributions are welcome! Please read the [`CONTRIBUTING.md`](CONTRIBUTING.md) 
 
 This project is licensed under the **MIT License**. See the [`LICENSE.md`](LICENSE.md) file for details.
 
----
 
-### 🔖 Notes
 
-- Be sure to replace `https://github.com/yourusername/fittracker.git` with your actual GitHub repository URL.
-- You can customize this README further as the project evolves.
-
----
-
-Let me know if you'd like to add a section with screenshots or GIFs once your UI is polished!
