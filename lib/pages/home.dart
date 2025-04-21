@@ -2,6 +2,7 @@ import 'package:fittracker/pages/dashboard.dart';
 import 'package:fittracker/pages/meals.dart';
 import 'package:fittracker/pages/mood.dart';
 import 'package:fittracker/pages/workouts.dart';
+import 'package:fittracker/pages/map_page.dart'; // Import MapPage
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Number of tabs
+      length: 5, // Update the number of tabs
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -30,11 +31,18 @@ class HomePage extends StatelessWidget {
               Tab(text: "Meals"),
               Tab(text: "Mood"),
               Tab(text: "Workouts"),
+              Tab(text: "Map"),
             ],
           ),
         ),
         body: TabBarView(
-          children: [DashboardPage(), WorkoutsPage(), MealsPage(), MoodPage()],
+          children: [
+            DashboardPage(),
+            MealsPage(),
+            MoodPage(),
+            WorkoutsPage(),
+            MapPage(),
+          ],
         ),
       ),
     );
