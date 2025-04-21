@@ -1,5 +1,8 @@
+import 'package:fittracker/pages/dashboard.dart';
+import 'package:fittracker/pages/meals.dart';
+import 'package:fittracker/pages/mood.dart';
+import 'package:fittracker/pages/workouts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,49 +26,17 @@ class HomePage extends StatelessWidget {
           centerTitle: true,
           bottom: TabBar(
             tabs: [
-              Tab(text: "Workouts"),
+              Tab(text: "Dashboard"),
               Tab(text: "Meals"),
               Tab(text: "Mood"),
-              Tab(text: "Dashboard"),
+              Tab(text: "Workouts"),
             ],
           ),
         ),
         body: TabBarView(
-          children: [WorkoutsPage(), MealsPage(), MoodPage(), DashboardPage()],
+          children: [DashboardPage(), WorkoutsPage(), MealsPage(), MoodPage()],
         ),
       ),
     );
-  }
-}
-
-// Placeholder for Workouts page
-class WorkoutsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Workouts Page"));
-  }
-}
-
-// Placeholder for Meals page
-class MealsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Meals Page"));
-  }
-}
-
-// Placeholder for Mood page
-class MoodPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Mood Tracker Page"));
-  }
-}
-
-// Placeholder for Dashboard page
-class DashboardPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text("Dashboard Page"));
   }
 }
