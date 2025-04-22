@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion(24)
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.fittracker"
         // You can update the following values to match your application needs.
