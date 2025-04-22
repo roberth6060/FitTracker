@@ -31,18 +31,11 @@ class HomePage extends StatelessWidget {
               Tab(text: "Meals"),
               Tab(text: "Mood"),
               Tab(text: "Workouts"),
-              Tab(text: "Map"),
             ],
           ),
         ),
         body: TabBarView(
-          children: [
-            DashboardPage(),
-            MealsPage(),
-            MoodPage(),
-            WorkoutsPage(),
-            MapPage(),
-          ],
+          children: [DashboardPage(), MealsPage(), MoodPage(), WorkoutsPage()],
         ),
       ),
     );

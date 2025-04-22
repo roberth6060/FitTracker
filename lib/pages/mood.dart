@@ -1,41 +1,82 @@
+import 'package:fittracker/fittracker_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MoodPage extends StatefulWidget {
-  @override
-  _MoodPageState createState() => _MoodPageState();
-}
+class MoodPage extends StatelessWidget {
+  const MoodPage({super.key});
 
-class _MoodPageState extends State<MoodPage> {
-  final TextEditingController _noteController = TextEditingController();
-  String _selectedMood = '';
-  final List<_MoodEntry> _entries = [];
+  Future<void> _addMoodEntry(BuildContext context) async {
+    String mood = '';
+    String note = '';
 
-  final Map<String, IconData> _moodOptions = {
-    'Very Happy': Icons.sentiment_very_satisfied,
-    'Happy': Icons.sentiment_satisfied,
-    'Neutral': Icons.sentiment_neutral,
-    'Sad': Icons.sentiment_dissatisfied,
-    'Very Sad': Icons.sentiment_very_dissatisfied,
-  };
-
-  void _addEntry() {
-    if (_selectedMood.isEmpty) return;
-    setState(() {
-      _entries.insert(
-        0,
-        _MoodEntry(
-          mood: _selectedMood,
-          note: _noteController.text.trim(),
-          timestamp: DateTime.now(),
-        ),
-      );
-      _noteController.clear();
-      _selectedMood = '';
-    });
+    await showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: Text('Add Mood Entry'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Mood selection
+                Wrap(
+                  spacing: 12,
+                  children:
+                      {
+                        'Very Happy': Icons.sentiment_very_satisfied,
+                        'Happy': Icons.sentiment_satisfied,
+                        'Neutral': Icons.sentiment_neutral,
+                        'Sad': Icons.sentiment_dissatisfied,
+                        'Very Sad': Icons.sentiment_very_dissatisfied,
+                      }.entries.map((entry) {
+                        final isSelected = mood == entry.key;
+                        return ChoiceChip(
+                          label: Text(entry.key),
+                          avatar: Icon(
+                            entry.value,
+                            color: isSelected ? Colors.white : Colors.grey[700],
+                          ),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            if (selected) {
+                              mood = entry.key;
+                            }
+                          },
+                          selectedColor: Theme.of(context).primaryColor,
+                        );
+                      }).toList(),
+                ),
+                // Note input field
+                TextField(
+                  onChanged: (value) => note = value.trim(),
+                  decoration: InputDecoration(labelText: 'Notes (optional)'),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (mood.isNotEmpty) {
+                    Provider.of<FitTrackerState>(
+                      context,
+                      listen: false,
+                    ).addMoodEntry(mood, note);
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('Add'),
+              ),
+            ],
+          ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = Provider.of<FitTrackerState>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Mood Tracker')),
       body: SingleChildScrollView(
@@ -43,71 +84,47 @@ class _MoodPageState extends State<MoodPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'How are you feeling today?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              children:
-                  _moodOptions.entries.map((entry) {
-                    final mood = entry.key;
-                    final icon = entry.value;
-                    final isSelected = _selectedMood == mood;
-                    return ChoiceChip(
-                      label: Text(mood),
-                      avatar: Icon(
-                        icon,
-                        color: isSelected ? Colors.white : Colors.grey[700],
-                      ),
-                      selected: isSelected,
-                      onSelected: (_) => setState(() => _selectedMood = mood),
-                      selectedColor: Theme.of(context).primaryColor,
-                    );
-                  }).toList(),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _noteController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Notes (optional)',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
             Center(
               child: ElevatedButton(
-                onPressed: _addEntry,
-                child: Text('Save Entry'),
+                onPressed: () => _addMoodEntry(context),
+                child: Text('Add Mood Entry'),
               ),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 20),
             Text(
-              'Recent Entries',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              'Recent Mood Entries',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            if (_entries.isEmpty)
+            if (state.moodEntries.isEmpty)
               Center(
                 child: Text(
-                  'No entries yet.',
+                  'No mood entries yet.',
                   style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
                 ),
               )
             else
-              ..._entries.map(
-                (e) => Card(
+              ...state.moodEntries.map(
+                (entry) => Card(
                   child: ListTile(
-                    leading: Icon(_moodOptions[e.mood], color: Colors.blue),
-                    title: Text(e.mood),
+                    leading: Icon(
+                      {
+                        // Replace this with mood to icon mapping.
+                        'Very Happy': Icons.sentiment_very_satisfied,
+                        'Happy': Icons.sentiment_satisfied,
+                        'Neutral': Icons.sentiment_neutral,
+                        'Sad': Icons.sentiment_dissatisfied,
+                        'Very Sad': Icons.sentiment_very_dissatisfied,
+                      }[entry.mood],
+                      color: Colors.blue,
+                    ),
+                    title: Text(entry.mood),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (e.note.isNotEmpty) Text(e.note),
+                        if (entry.note.isNotEmpty) Text(entry.note),
                         Text(
-                          '${e.timestamp.toLocal()}'.split('.')[0],
+                          '${entry.timestamp.toLocal()}'.split('.')[0],
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],
@@ -120,12 +137,4 @@ class _MoodPageState extends State<MoodPage> {
       ),
     );
   }
-}
-
-class _MoodEntry {
-  final String mood;
-  final String note;
-  final DateTime timestamp;
-
-  _MoodEntry({required this.mood, required this.note, required this.timestamp});
 }
