@@ -1,6 +1,6 @@
 # FitTracker
 
-**FitTracker** is a personal fitness and wellness tracker developed using Flutter. This application helps users log their workouts, document meals, set wellness goals, and track their overall health using an intuitive interface and engaging visualizations.
+**FitTracker** is a personal fitness and wellness tracker developed using Flutter. This application helps users log their workouts, document meals, set wellness goals, and track their overall health using an intuitive interface and engaging visualizations. This App was created for Foundations Of Mobile Design class at RIT Croatia. 
 
 ---
 
