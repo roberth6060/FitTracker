@@ -1,6 +1,7 @@
 import 'package:fittracker/fittracker_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart'; // Needed for isSameDay
 
 class WorkoutsPage extends StatelessWidget {
   @override
@@ -18,9 +19,13 @@ class WorkoutsPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Consumer<FitTrackerState>(
-              // Use Consumer to listen for changes.
               builder: (context, state, child) {
-                if (state.workouts.isEmpty)
+                final filteredWorkouts =
+                    state.workouts.where((w) {
+                      return isSameDay(w.timestamp, state.selectedDate);
+                    }).toList();
+
+                if (filteredWorkouts.isEmpty)
                   return Center(
                     child: Text(
                       'No workouts logged yet.',
@@ -33,7 +38,7 @@ class WorkoutsPage extends StatelessWidget {
 
                 return Column(
                   children:
-                      state.workouts
+                      filteredWorkouts
                           .map(
                             (w) => Card(
                               child: ListTile(
